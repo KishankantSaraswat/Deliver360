@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shipment Track</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlIN2fe6AzvkDJfhGRmdKNGCa1elVXQ20&callback=initMap" defer></script>
+  <style>
+    #map {
+      height: 400px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <div class="bg-gray-200 p-6 border-r border-gray-300 w-64 flex flex-col">
+      <div class="flex items-center mb-6">
+        <div class="bg-gray-400 rounded-full w-8 h-8 mr-2"></div>
+        <span class="font-medium">Load Swift NYC</span>
+      </div>
+      <nav class="space-y-2">
+        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Dashboard</a>
+        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Shipment</a>
+        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Customer</a>
+        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Analysis</a>
+        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">History</a>
+        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Notification</a>
+      </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-6">
+      <header class="flex justify-between items-center mb-6 bg-red-500 text-white py-4 px-6">
+        <h1 class="text-2xl font-bold">Shipment track</h1>
+        <button class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded">
+          Select truck
+        </button>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-medium mb-4">Shipment details</h2>
+          <!-- Shipment details content -->
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-medium mb-4">Shipment trends</h2>
+          <!-- Shipment trends content -->
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-medium mb-4">Route efficiency</h2>
+          <div class="text-4xl font-bold text-red-500">96%</div>
+          <p class="text-gray-500">The best road</p>
+        </div>
+      </div>
+
+      <!-- Map Section -->
+      <div class="mt-6">
+        <div class="bg-white rounded-lg shadow p-6">
+          <h2 class="text-lg font-medium mb-4">Map</h2>
+          <div id="map"></div>
+        </div>
+      </div>
+
+      <div class="mt-6 bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-medium mb-4">Recent trips</h2>
+        <!-- Recent trips content -->
+      </div>
+
+      <div class="mt-6 bg-white rounded-lg shadow p-6">
+        <h2 class="text-lg font-medium mb-4">Alerts and Notifications</h2>
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-red-500 font-medium">Geofencing alert</h3>
+            <p class="text-gray-500">Truck crossed geofence at Warehouse A. A driver arrival notification sent to start.</p>
+          </div>
+          <span class="text-red-500 font-medium">15.48</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize and add the map
+    function initMap() {
+      // The location of the starting point
+      const startPoint = { lat: 40.7128, lng: -74.0060 }; // Example: New York City
+      const endPoint = { lat: 40.73061, lng: -73.935242 }; // Example: Example Destination
+
+      // The map, centered at the starting point
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 12,
+        center: startPoint,
+      });
+
+      // Add markers
+      const marker1 = new google.maps.Marker({
+        position: startPoint,
+        map: map,
+        title: "Start Point",
+      });
+
+      const marker2 = new google.maps.Marker({
+        position: endPoint,
+        map: map,
+        title: "End Point",
+      });
+
+      // Define a route
+      const route = new google.maps.Polyline({
+        path: [startPoint, endPoint],
+        geodesic: true,
+        strokeColor: "#FF0000",
+        strokeOpacity: 1.0,
+        strokeWeight: 2,
+      });
+
+      // Display the route on the map
+      route.setMap(map);
+    }
+  </script>
+</body>
+</html>
