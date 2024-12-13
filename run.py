@@ -11,6 +11,10 @@ from twilio.rest import Client
 from sys import exit
 from apps.config import config_dict
 from apps import create_app, db
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 # WARNING: Don't run with debug turned on in production!
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
@@ -42,8 +46,8 @@ if DEBUG:
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT)
 
 # Twilio Configuration
-account_sid = "ACc1ba0a48cb0ddae6c72c6146492d5bd9"
-auth_token = "c7401b79e78fbbc397d89acb65e0ebe6"
+account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+auth_token = os.getenv('TWILIO_AUTH_TOKEN')
 client = Client(account_sid, auth_token)
 
 # Function to initiate the Twilio voice call
