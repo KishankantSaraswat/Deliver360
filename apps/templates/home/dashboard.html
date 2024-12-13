@@ -4,6 +4,8 @@
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 <style>
@@ -17,340 +19,212 @@
 
 {% block content %}
 
-  
-    <div class="row">
-        <div class="col-12 mb-4">
-            <div class="card bg-yellow-100 border-0 shadow">
-                <div class="card-header d-sm-flex flex-row align-items-center flex-0">
-                    <p>Your Delivery location with Optimal Path</p>
-                </div>
-                <div class="card-body p-2">
-                    <!-- Google Map Container -->
-                    <div id="map"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-4 mb-4">
-            <div class="card border-0 shadow">
-                <div class="card-body">
-                    <div class="row d-block d-xl-flex align-items-center">
-                        <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                            <div class="icon-shape icon-shape-primary rounded me-4 me-sm-0">
-                                <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path></svg>
-                            </div>
-                            <div class="d-sm-none">
-                                <h2 class="h5">Total Order</h2>
-                                <h3 class="fw-extrabold mb-1">34
+<body class="bg-light">
 
-                                </h3>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-7 px-xl-0">
-                            <div class="d-none d-sm-block">
-                                <h2 class="h6 text-gray-400 mb-0">Total Order</h2>
-                                <h3 class="fw-extrabold mb-2">123</h3>
-                            </div>
-                            <small class="d-flex align-items-center text-gray-500">
-                                Feb 1 - Mar 1,  
-                                <svg class="icon icon-xxs text-gray-500 ms-2 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"></path></svg>
-                                
-                            </small> 
-                            <div class="small d-flex mt-1">                               
-                                <div>last month <svg class="icon icon-xs text-success" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg><span class="text-success fw-bolder">222</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-sm-6 col-xl-4 mb-4">
-            <div class="card border-0 shadow">
-                <div class="card-body">
-                    <div class="row d-block d-xl-flex align-items-center">
-                        <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                            <div class="icon-shape icon-shape-primary rounded me-4 me-sm-0">
-                                <svg class="icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M6.995 12c0-1.63 1.36-3 3-3h7c2.1 0 3.905 1.82 3.905 3.99C20.9 16.24 19.075 18 16.99 18h-9c-2.25 0-4-1.79-4-3.995C3.995 12.84 5.08 12 6.995 12zm9.02-8a3 3 0 11-.02 6 3 3 0 01.02-6z"></path>
-                                </svg>
-                            </div>
-                            <div class="d-sm-none">
-                                <h2 class="fw-extrabold h5">Weather</h2>
-                                <h3 class="mb-1">22°C</h3>
-                            </div>
-                        </div>
-                        <div class="col-12 col-xl-7 px-xl-0">
-                            <div class="d-none d-sm-block">
-                                <h2 class="h6 text-gray-400 mb-0">Weather Forecast</h2>
-                                <h3 class="fw-extrabold mb-2">22°C, Clear Sky</h3>
-                            </div>
-                            <small class="d-flex align-items-center text-gray-500">
-                                Next Location: Manipal University, Jaipur
-                            </small> 
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+  
+<div class="container py-4">
+    <div class="row g-4">
         
-        <div class="col-12 col-sm-6 col-xl-4 mb-4">
-            <div class="card border-0 shadow">
+        <div class="col-12">
+            <div class="card shadow border-0">
                 <div class="card-body">
-                    <div class="row d-block d-xl-flex align-items-center">
-                        <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
-                            <div class="icon-shape icon-shape-primary rounded me-4 me-sm-0">
-                                <svg class="icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                </svg>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="ri-map-pin-line text-primary fs-3 me-3"></i>
+                        <h5 class="card-title mb-0">Delivery Location</h5>
+                    </div>
+                    <div class="bg-secondary rounded-3 d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <p class="text-white">Map Placeholder</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="ri-sun-line text-warning fs-3 me-3"></i>
+                        <h5 class="card-title mb-0">Weather Forecast</h5>
+                    </div>
+                    <div class="d-flex justify-content-between mb-4">
+                        <div>
+                            <p class="display-4 fw-bold">22°C</p>
+                            <p class="text-muted">Clear Sky</p>
+                        </div>
+                        <div class="text-end">
+                            <p class="mb-1 fw-medium">Next Location</p>
+                            <p class="text-primary">Manipal University</p>
+                        </div>
+                    </div>
+                    <div class="bg-light p-3 rounded-3 border">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="ri-truck-line text-primary fs-5 me-2"></i>
+                                <h6 class="mb-0">Delivery Prediction</h6>
                             </div>
-                            <div class="d-sm-none">
-                                <h2 class="fw-extrabold h5">Smart Helmet Data</h2>
+                            <span class="badge bg-success">Favorable</span>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col">
+                                <p class="mb-1 text-muted">Wind Speed</p>
+                                <p class="fw-bold">8 km/h</p>
+                            </div>
+                            <div class="col">
+                                <p class="mb-1 text-muted">Precipitation</p>
+                                <p class="fw-bold">10%</p>
+                            </div>
+                            <div class="col">
+                                <p class="mb-1 text-muted">Visibility</p>
+                                <p class="fw-bold">15 km</p>
                             </div>
                         </div>
-                        <div class="col-12 col-xl-7 px-xl-0">
-                            <div class="d-none d-sm-block">
-                                <h2 class="h6 text-gray-400 mb-0">Smart Helmet Data</h2>
-                            </div>
-                            <ul class="list-unstyled text-gray-500 small">
-                                <li><strong>Accelerometer:</strong> 9.8 m/s²</li>
-                                <li><strong>Alcohol Level:</strong> 0.02% BAC</li>
-                                <li><strong>Humidity:</strong> 55%</li>
-                                <li><strong>Temperature:</strong> 25°C</li>
-                                <li><strong>Air Quality:</strong> Poor</li>
-                            </ul>
-                            <small class="text-gray-500">Data updated: Just now</small>
-                            
+                        <div class="bg-white p-3 rounded-3 shadow-sm mt-3">
+                            <p class="small mb-0">
+                                <i class="ri-information-line text-primary me-2"></i>
+                                Optimal delivery conditions. Low wind, minimal precipitation, and good visibility ensure smooth transportation.
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
+        <div class="col-md-6">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="ri-shield-check-line text-purple fs-3 me-3"></i>
+                        <h5 class="card-title mb-0">Smart Helmet</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Accelerometer</span>
+                            <span class="fw-bold">9.8 m/s²</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Alcohol Level</span>
+                            <span class="fw-bold">0.02% BAC</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Humidity</span>
+                            <span class="fw-bold">55%</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Temperature</span>
+                            <span class="fw-bold">25°C</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Air Quality</span>
+                            <span class="fw-bold text-danger">Poor</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="card-title mb-0">Today's Orders</h5>
+                        <div class="btn-group">
+                            <button class="btn btn-primary btn-sm">Today</button>
+                            <button class="btn btn-outline-secondary btn-sm">Week</button>
+                            <button class="btn btn-outline-secondary btn-sm">Month</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr class="table-light">
+                                    <th>Order ID</th>
+                                    <th>Location</th>
+                                    <th>Distance</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ORD-123</td>
+                                    <td>Manipal University, Jaipur</td>
+                                    <td>20 KM</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-213</td>
+                                    <td>Jaipur Station</td>
+                                    <td>23 KM</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-321</td>
+                                    <td>Jaipur Station</td>
+                                    <td>10 KM</td>
+                                    <td><span class="badge bg-success">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-413</td>
+                                    <td>Sector 12, Noida</td>
+                                    <td>15 KM</td>
+                                    <td><span class="badge bg-danger">Cancelled</span></td>
+                                </tr>
+                                <tr>
+                                    <td>ORD-514</td>
+                                    <td>Indore</td>
+                                    <td>40 KM</td>
+                                    <td><span class="badge bg-warning">Pending</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="ri-heart-pulse-line text-danger fs-3 me-3"></i>
+                        <h5 class="card-title mb-0">Fitness Metrics</h5>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col">
+                            <div class="bg-danger bg-opacity-25 rounded-circle p-3 mb-2">
+                                <i class="ri-line-chart-line text-danger fs-4"></i>
+                            </div>
+                            <p class="mb-1">Heart Rate</p>
+                            <p class="fw-bold">78</p>
+                        </div>
+                        <div class="col">
+                            <div class="bg-success bg-opacity-25 rounded-circle p-3 mb-2">
+                                <i class="ri-shield-check-line text-success fs-4"></i>
+                            </div>
+                            <p class="mb-1">SpO2</p>
+                            <p class="fw-bold">95%</p>
+                        </div>
+                        <div class="col">
+                            <div class="bg-primary bg-opacity-25 rounded-circle p-3 mb-2">
+                                <i class="ri-temp-cold-line text-primary fs-4"></i>
+                            </div>
+                            <p class="mb-1">Temp</p>
+                            <p class="fw-bold">36.5°</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div class="row">
-        <div class="col-12 col-xl-8">
-            <div class="row">
-                <div class="col-12 mb-4">
-                    <div class="card border-0 shadow">
-                        <div class="card-header">
-                            <div class="row align-items-center">
-                                <div class="col">
-                                    <h2 class="fs-5 fw-bold mb-0">Today`s Orders</h2>
-                                </div>
-                                <div class="col text-end">
-                                    <a href="#" class="btn btn-sm btn-primary">See all</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table align-items-center table-flush">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="border-bottom" scope="col">Order ID</th>
-                                        <th class="border-bottom" scope="col">Location</th>
-                                        <th class="border-bottom" scope="col">Distance</th>
-                                        <th class="border-bottom" scope="col">Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th class="text-gray-900" scope="row">
-                                            ORD-123
-                                        </th>
-                                        <td class="fw-bolder text-gray-500">
-                                            Manipal University, Jaipur
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            20 KM
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            <select class="form-select form-select-sm" aria-label="Status select">
-                                                <option value="completed" selected>Completed</option>
-                                                <option value="pending">Pending</option>
-                                                <option value="cancelled">Cancelled</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-gray-900" scope="row">
-                                            ORD-213
-                                        </th>
-                                        <td class="fw-bolder text-gray-500">
-                                            Jaipur Station
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            23 KM
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            <select class="form-select form-select-sm" aria-label="Status select">
-                                                <option value="pending" selected>Pending</option>
-                                                <option value="completed">Completed</option>
-                                                <option value="cancelled">Cancelled</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-gray-900" scope="row">
-                                            ORD-321
-                                        </th>
-                                        <td class="fw-bolder text-gray-500">
-                                            Jaipur Station
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            10 KM
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            <select class="form-select form-select-sm" aria-label="Status select">
-                                                <option value="completed" selected>Completed</option>
-                                                <option value="pending">Pending</option>
-                                                <option value="cancelled">Cancelled</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-gray-900" scope="row">
-                                            ORD-413
-                                        </th>
-                                        <td class="fw-bolder text-gray-500">
-                                            Sector 12, Noida
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            15 KM
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            <select class="form-select form-select-sm" aria-label="Status select">
-                                                <option value="cancelled" selected>Cancelled</option>
-                                                <option value="pending">Pending</option>
-                                                <option value="completed">Completed</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-gray-900" scope="row">
-                                            ORD-514
-                                        </th>
-                                        <td class="fw-bolder text-gray-500">
-                                            Indore
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            40 KM
-                                        </td>
-                                        <td class="fw-bolder text-gray-500">
-                                            <select class="form-select form-select-sm" aria-label="Status select">
-                                                <option value="pending" selected>Pending</option>
-                                                <option value="completed">Completed</option>
-                                                <option value="cancelled">Cancelled</option>
-                                            </select>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>     
-        </div>
-        <div class="col-12 col-xl-4">
-            <div class="col-12 px-0 mb-4">
-                <div class="card border-0 shadow">
-                    <div class="card-header d-flex flex-row align-items-center flex-0 border-bottom">
-                        <div class="d-block">
-                            <div class="h6 fw-normal text-gray mb-2">Fitness Band Data</div>
-                            <h2 class="h3 fw-extrabold">Overview</h2>
-                            <div class="small mt-2">
-                                <span class="fas fa-angle-up text-success"></span>
-                                <span class="text-success fw-bold">Tracking live data</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <!-- Heart Rate Gauge -->
-                            <div class="col-md-4">
-                                <div id="heartRateGauge"></div>
-                                <p class="text-center mt-2">Heart Rate</p>
-                            </div>
-                            <!-- SpO2 Gauge -->
-                            <div class="col-md-4">
-                                <div id="spo2Gauge"></div>
-                                <p class="text-center mt-2">SpO2</p>
-                            </div>
-                            <!-- Body Temperature Gauge -->
-                            <div class="col-md-4">
-                                <div id="tempGauge"></div>
-                                <p class="text-center mt-2">Body Temperature</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-            <!-- <div class="col-12 px-0 mb-4">
-                <div class="card border-0 shadow">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between border-bottom pb-3">
-                            <div>
-                                <div class="h6 mb-0 d-flex align-items-center">
-                                    <svg class="icon icon-xs text-gray-500 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"></path></svg>
-                                    Global Rank
-                                </div>
-                            </div>
-                            <div>
-                                <a href="#" class="d-flex align-items-center fw-bold">
-                                    #755
-                                    <svg class="icon icon-xs text-gray-500 ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between border-bottom py-3">
-                            <div>
-                                <div class="h6 mb-0 d-flex align-items-center">
-                                    <svg class="icon icon-xs text-gray-500 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h10a1 1 0 01.8 1.6L14.25 8l2.55 3.4A1 1 0 0116 13H6a1 1 0 00-1 1v3a1 1 0 11-2 0V6z" clip-rule="evenodd"></path></svg>
-                                    Country Rank
-                                </div>
-                                <div class="small card-stats">
-                                    United States
-                                    <svg class="icon icon-xs text-success" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
-                                </div>
-                            </div>
-                            <div>
-                                <a href="#" class="d-flex align-items-center fw-bold">
-                                    #32
-                                    <svg class="icon icon-xs text-gray-500 ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center justify-content-between pt-3">
-                            <div>
-                                <div class="h6 mb-0 d-flex align-items-center">
-                                    <svg class="icon icon-xs text-gray-500 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z" clip-rule="evenodd"></path><path d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"></path></svg>
-                                    Category Rank
-                                </div>
-                                <div class="small card-stats">
-                                    Computers Electronics > Technology
-                                    <svg class="icon icon-xs text-success" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
-                                </div>
-                            </div>
-                            <div>
-                                <a href="#" class="d-flex align-items-center fw-bold">
-                                    #11
-                                    <svg class="icon icon-xs text-gray-500 ms-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 0l-2 2a1 1 0 101.414 1.414L8 10.414l1.293 1.293a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            </div>
-        </div>
-    </div>
+</div>
+</body>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlIN2fe6AzvkDJfhGRmdKNGCa1elVXQ20&callback=initMap" async defer></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <script>

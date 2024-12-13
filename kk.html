@@ -1,125 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shipment Track</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlIN2fe6AzvkDJfhGRmdKNGCa1elVXQ20&callback=initMap" defer></script>
-  <style>
-    #map {
-      height: 400px;
-      width: 100%;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 font-sans">
-  <div class="flex h-screen">
-    <!-- Sidebar -->
-    <div class="bg-gray-200 p-6 border-r border-gray-300 w-64 flex flex-col">
-      <div class="flex items-center mb-6">
-        <div class="bg-gray-400 rounded-full w-8 h-8 mr-2"></div>
-        <span class="font-medium">Load Swift NYC</span>
-      </div>
-      <nav class="space-y-2">
-        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Dashboard</a>
-        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Shipment</a>
-        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Customer</a>
-        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Analysis</a>
-        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">History</a>
-        <a href="#" class="block px-4 py-2 rounded-md hover:bg-gray-300 text-gray-600 font-medium">Notification</a>
-      </nav>
+<body class="bg-light">
+    <div class="container py-4">
+        <div class="row g-4">
+            
+            <div class="col-12">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="ri-map-pin-line text-primary fs-3 me-3"></i>
+                            <h5 class="card-title mb-0">Delivery Location</h5>
+                        </div>
+                        <div class="bg-secondary rounded-3 d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <p class="text-white">Map Placeholder</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="ri-sun-line text-warning fs-3 me-3"></i>
+                            <h5 class="card-title mb-0">Weather Forecast</h5>
+                        </div>
+                        <div class="d-flex justify-content-between mb-4">
+                            <div>
+                                <p class="display-4 fw-bold">22°C</p>
+                                <p class="text-muted">Clear Sky</p>
+                            </div>
+                            <div class="text-end">
+                                <p class="mb-1 fw-medium">Next Location</p>
+                                <p class="text-primary">Manipal University</p>
+                            </div>
+                        </div>
+                        <div class="bg-light p-3 rounded-3 border">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="ri-truck-line text-primary fs-5 me-2"></i>
+                                    <h6 class="mb-0">Delivery Prediction</h6>
+                                </div>
+                                <span class="badge bg-success">Favorable</span>
+                            </div>
+                            <div class="row text-center">
+                                <div class="col">
+                                    <p class="mb-1 text-muted">Wind Speed</p>
+                                    <p class="fw-bold">8 km/h</p>
+                                </div>
+                                <div class="col">
+                                    <p class="mb-1 text-muted">Precipitation</p>
+                                    <p class="fw-bold">10%</p>
+                                </div>
+                                <div class="col">
+                                    <p class="mb-1 text-muted">Visibility</p>
+                                    <p class="fw-bold">15 km</p>
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded-3 shadow-sm mt-3">
+                                <p class="small mb-0">
+                                    <i class="ri-information-line text-primary me-2"></i>
+                                    Optimal delivery conditions. Low wind, minimal precipitation, and good visibility ensure smooth transportation.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="ri-shield-check-line text-purple fs-3 me-3"></i>
+                            <h5 class="card-title mb-0">Smart Helmet</h5>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Accelerometer</span>
+                                <span class="fw-bold">9.8 m/s²</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Alcohol Level</span>
+                                <span class="fw-bold">0.02% BAC</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Humidity</span>
+                                <span class="fw-bold">55%</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Temperature</span>
+                                <span class="fw-bold">25°C</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Air Quality</span>
+                                <span class="fw-bold text-danger">Poor</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title mb-0">Today's Orders</h5>
+                            <div class="btn-group">
+                                <button class="btn btn-primary btn-sm">Today</button>
+                                <button class="btn btn-outline-secondary btn-sm">Week</button>
+                                <button class="btn btn-outline-secondary btn-sm">Month</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr class="table-light">
+                                        <th>Order ID</th>
+                                        <th>Location</th>
+                                        <th>Distance</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>ORD-123</td>
+                                        <td>Manipal University, Jaipur</td>
+                                        <td>20 KM</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ORD-213</td>
+                                        <td>Jaipur Station</td>
+                                        <td>23 KM</td>
+                                        <td><span class="badge bg-warning">Pending</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ORD-321</td>
+                                        <td>Jaipur Station</td>
+                                        <td>10 KM</td>
+                                        <td><span class="badge bg-success">Completed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ORD-413</td>
+                                        <td>Sector 12, Noida</td>
+                                        <td>15 KM</td>
+                                        <td><span class="badge bg-danger">Cancelled</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ORD-514</td>
+                                        <td>Indore</td>
+                                        <td>40 KM</td>
+                                        <td><span class="badge bg-warning">Pending</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow border-0">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="ri-heart-pulse-line text-danger fs-3 me-3"></i>
+                            <h5 class="card-title mb-0">Fitness Metrics</h5>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col">
+                                <div class="bg-danger bg-opacity-25 rounded-circle p-3 mb-2">
+                                    <i class="ri-line-chart-line text-danger fs-4"></i>
+                                </div>
+                                <p class="mb-1">Heart Rate</p>
+                                <p class="fw-bold">78</p>
+                            </div>
+                            <div class="col">
+                                <div class="bg-success bg-opacity-25 rounded-circle p-3 mb-2">
+                                    <i class="ri-shield-check-line text-success fs-4"></i>
+                                </div>
+                                <p class="mb-1">SpO2</p>
+                                <p class="fw-bold">95%</p>
+                            </div>
+                            <div class="col">
+                                <div class="bg-primary bg-opacity-25 rounded-circle p-3 mb-2">
+                                    <i class="ri-temp-cold-line text-primary fs-4"></i>
+                                </div>
+                                <p class="mb-1">Temp</p>
+                                <p class="fw-bold">36.5°</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex-1 p-6">
-      <header class="flex justify-between items-center mb-6 bg-red-500 text-white py-4 px-6">
-        <h1 class="text-2xl font-bold">Shipment track</h1>
-        <button class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded">
-          Select truck
-        </button>
-      </header>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-white rounded-lg shadow p-6">
-          <h2 class="text-lg font-medium mb-4">Shipment details</h2>
-          <!-- Shipment details content -->
-        </div>
-        <div class="bg-white rounded-lg shadow p-6">
-          <h2 class="text-lg font-medium mb-4">Shipment trends</h2>
-          <!-- Shipment trends content -->
-        </div>
-        <div class="bg-white rounded-lg shadow p-6">
-          <h2 class="text-lg font-medium mb-4">Route efficiency</h2>
-          <div class="text-4xl font-bold text-red-500">96%</div>
-          <p class="text-gray-500">The best road</p>
-        </div>
-      </div>
-
-      <!-- Map Section -->
-      <div class="mt-6">
-        <div class="bg-white rounded-lg shadow p-6">
-          <h2 class="text-lg font-medium mb-4">Map</h2>
-          <div id="map"></div>
-        </div>
-      </div>
-
-      <div class="mt-6 bg-white rounded-lg shadow p-6">
-        <h2 class="text-lg font-medium mb-4">Recent trips</h2>
-        <!-- Recent trips content -->
-      </div>
-
-      <div class="mt-6 bg-white rounded-lg shadow p-6">
-        <h2 class="text-lg font-medium mb-4">Alerts and Notifications</h2>
-        <div class="flex items-center justify-between">
-          <div>
-            <h3 class="text-red-500 font-medium">Geofencing alert</h3>
-            <p class="text-gray-500">Truck crossed geofence at Warehouse A. A driver arrival notification sent to start.</p>
-          </div>
-          <span class="text-red-500 font-medium">15.48</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Initialize and add the map
-    function initMap() {
-      // The location of the starting point
-      const startPoint = { lat: 40.7128, lng: -74.0060 }; // Example: New York City
-      const endPoint = { lat: 40.73061, lng: -73.935242 }; // Example: Example Destination
-
-      // The map, centered at the starting point
-      const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 12,
-        center: startPoint,
-      });
-
-      // Add markers
-      const marker1 = new google.maps.Marker({
-        position: startPoint,
-        map: map,
-        title: "Start Point",
-      });
-
-      const marker2 = new google.maps.Marker({
-        position: endPoint,
-        map: map,
-        title: "End Point",
-      });
-
-      // Define a route
-      const route = new google.maps.Polyline({
-        path: [startPoint, endPoint],
-        geodesic: true,
-        strokeColor: "#FF0000",
-        strokeOpacity: 1.0,
-        strokeWeight: 2,
-      });
-
-      // Display the route on the map
-      route.setMap(map);
-    }
-  </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
