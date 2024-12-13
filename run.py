@@ -56,8 +56,8 @@ def initiate_twilio_call():
         # Create a call
         call = client.calls.create(
             url="http://demo.twilio.com/docs/voice.xml",  # Replace with your TwiML URL
-            to="+918923834362",  # The recipient's phone number
-            from_="+13613493717"  # Your Twilio phone number
+            to=os.getenv('TO_PHONE_NUMBER'),  # The recipient's phone number
+            from_=os.getenv('FROM_PHONE_NUMBER')  # Your Twilio phone number
         )
         return call.sid
     except Exception as e:

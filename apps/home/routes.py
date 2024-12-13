@@ -39,6 +39,18 @@ def route_template(template):
         return render_template('home/page-500.html'), 500
 
 
+@blueprint.route('/adminkk')
+
+def admin_page():
+    if not current_user.is_admin:  # Ensure only admins can access this page
+        return render_template('home/page-403.html'), 403  # Forbidden
+
+    return render_template('home/admin.html', 
+                           segment='admin', 
+                           user_id=current_user.id)
+
+
+
 # Helper - Extract current page name from request
 def get_segment(request):
 
