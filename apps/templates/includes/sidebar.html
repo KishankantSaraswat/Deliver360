@@ -88,6 +88,19 @@
                   <span class="sidebar-text">Settings</span>
               </a>
           </li>
+          
+          
+        </li><li class="nav-item {% if 'dashboard' in segment %} active {% endif %}">
+            <a href="javascript:void(0);" id="emergencyLink" class="nav-link">
+                <span class="sidebar-icon">
+                    <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2a1 1 0 011 1v6a1 1 0 01-2 0V3a1 1 0 011-1zM12 16a1 1 0 011 1v3a1 1 0 01-2 0v-3a1 1 0 011-1zM12 20a1 1 0 011 1v1a1 1 0 01-2 0v-1a1 1 0 011-1zM4.22 5.22a1 1 0 011.41 0L12 10.59l6.37-5.37a1 1 0 011.41 1.41l-7 7a1 1 0 01-1.42 0l-7-7a1 1 0 010-1.41z"></path>
+                    </svg>
+                </span>
+                <span class="sidebar-text">Emergency 🚨</span>
+            </a>
+        </li>
+        
       </ul>
 
       <div class="alert alert-warning mt-auto mx-3 mb-3">
@@ -100,3 +113,35 @@
       </div>
   </div>
 </nav>
+
+<script>
+    // Wait for the DOM to load
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select the emergency link
+        const emergencyLink = document.getElementById('emergencyLink');
+
+        // Add an event listener for the click event
+        emergencyLink.addEventListener('click', function() {
+            // Show a message (optional)
+            alert("Initiating Emergency Call...");
+
+            // Send an AJAX request to the Flask backend
+            fetch('/make-call', {
+                method: 'GET',  // Using GET method to trigger the call
+            })
+            .then(response => response.json())  // Expecting JSON response
+            .then(data => {
+                // Handle the response, for example, show a success message
+                if (data["Call SID"]) {
+                    alert('Emergency call started. Call SID: ' + data["Call SID"]);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred.');
+            });
+        });
+    });
+</script>
