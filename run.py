@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 """
+Flask App with Twilio Integration
 Copyright (c) 2019 - present AppSeed.us
 """
 
@@ -13,63 +14,71 @@ from apps.config import config_dict
 from apps import create_app, db
 from dotenv import load_dotenv
 
-
+# Load environment variables
 load_dotenv()
 
 # WARNING: Don't run with debug turned on in production!
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 
-# The configuration
+# Configure app mode
 get_config_mode = 'Debug' if DEBUG else 'Production'
 
 try:
-    # Load the configuration using the default values
+    # Load the app configuration
     app_config = config_dict[get_config_mode.capitalize()]
 except KeyError:
     exit('Error: Invalid <config_mode>. Expected values [Debug, Production] ')
 
-# Initialize the Flask app
+# Initialize Flask app
 app = create_app(app_config)
 
-# Migrate setup
+# Database migration setup
 Migrate(app, db)
 
-# Minify setup (for production)
+# Minify setup (only in production)
 if not DEBUG:
     Minify(app=app, html=True, js=False, cssless=False)
 
-# Logging setup for Debug mode
+# Logging setup in debug mode
 if DEBUG:
     app.logger.info('DEBUG            = ' + str(DEBUG))
     app.logger.info('Page Compression = ' + 'FALSE' if DEBUG else 'TRUE')
     app.logger.info('DBMS             = ' + app_config.SQLALCHEMY_DATABASE_URI)
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT)
 
-# Twilio Configuration
-account_sid = os.getenv('TWILIO_ACCOUNT_SID')
-auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+# Twilio credentials from environment variables
+account_sid = os.getenv('TWILIO_ACCOUNT_SID', 'ACc1ba0a48cb0ddae6c72c6146492d5bd9')  # Replace with your Account SID
+auth_token = os.getenv('TWILIO_AUTH_TOKEN', '6336806d01669c81599de47f229d04af')  # Replace with your Auth Token
 client = Client(account_sid, auth_token)
 
-# Function to initiate the Twilio voice call
+# Function to initiate a Twilio voice call
 def initiate_twilio_call():
+    """
+    Initiates a Twilio voice call to the specified number.
+    Returns the Call SID on success or an error message on failure.
+    """
     try:
-        # Create a call
         call = client.calls.create(
-            url="http://demo.twilio.com/docs/voice.xml",  # Replace with your TwiML URL
-            to=os.getenv('TO_PHONE_NUMBER'),  # The recipient's phone number
-            from_=os.getenv('FROM_PHONE_NUMBER')  # Your Twilio phone number
+            url="http://demo.twilio.com/docs/voice.xml",  # TwiML instructions
+            to="+918923834362",  # Recipient's phone number
+            from_="+13613493717"  # Your Twilio phone number
         )
         return call.sid
     except Exception as e:
         return str(e)
 
-# Define a route to trigger the Twilio voice call
+# Route to trigger the Twilio voice call
 @app.route('/make-call', methods=['GET'])
 def make_call():
-    # Call the function to initiate the call and get the SID
+    """
+    Endpoint to make an emergency voice call.
+    """
     call_sid = initiate_twilio_call()
-    return jsonify({"Call SID": call_sid})
+    if call_sid.startswith("CA"):  # Twilio Call SID typically starts with 'CA'
+        return jsonify({"message": "Emergency call initiated", "Call SID": call_sid}), 200
+    else:
+        return jsonify({"error": "Failed to initiate call", "details": call_sid}), 500
 
-# Main entry point for Flask app
+# Main entry point for the Flask app
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=DEBUG)

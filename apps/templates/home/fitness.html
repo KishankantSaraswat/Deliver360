@@ -1,0 +1,147 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Health Monitoring Dashboard{% endblock %}
+
+{% block stylesheets %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-center mb-8 text-gradient bg-gradient-to-r from-blue-500 via-green-500 to-purple-500">
+        🌟 Health Monitoring Dashboard 🌟
+    </h1>
+    
+    <div class="flex flex-col md:flex-row gap-6">
+        <!-- Heart Rate Card -->
+        <div class="flex-1 bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">❤️ Heart Rate</h2>
+            <div id="heartRateValue" class="text-5xl font-extrabold text-blue-600">--</div>
+            <div class="text-sm text-gray-500">bpm</div>
+        </div>
+    
+        <!-- SpO2 Card -->
+        <div class="flex-1 bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">🩸 SpO2</h2>
+            <div id="spo2Value" class="text-5xl font-extrabold text-green-600">--</div>
+            <div class="text-sm text-gray-500">%</div>
+        </div>
+    
+        <!-- Object Temp Card -->
+        <div class="flex-1 bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">🌡️ Object Temp</h2>
+            <div id="objectTempValue" class="text-5xl font-extrabold text-red-600">--</div>
+            <div class="text-sm text-gray-500">°C</div>
+        </div>
+    
+        <!-- Ambient Temp Card -->
+        <div class="flex-1 bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">🌈 Ambient Temp</h2>
+            <div id="ambientTempValue" class="text-5xl font-extrabold text-purple-600">--</div>
+            <div class="text-sm text-gray-500">°C</div>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="mt-8 bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">📊 Historical Data</h2>
+        <canvas id="healthChart" class="w-full h-96"></canvas>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    const healthChart = new Chart(document.getElementById('healthChart'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Heart Rate (bpm)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    data: [],
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                },
+                {
+                    label: 'SpO2 (%)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    data: [],
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                },
+                {
+                    label: 'Object Temp (°C)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: [],
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)',
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)',
+                    }
+                }
+            }
+        }
+    });
+
+    function updateDashboard(readings) {
+        const latestReading = readings[0];
+
+        // Update values
+        document.getElementById('heartRateValue').textContent = latestReading.heart_rate.toFixed(1);
+        document.getElementById('spo2Value').textContent = latestReading.spo2.toFixed(1);
+        document.getElementById('objectTempValue').textContent = latestReading.object_temp.toFixed(1);
+        document.getElementById('ambientTempValue').textContent = latestReading.ambient_temp.toFixed(1);
+
+        // Update chart
+        const labels = readings.map(r => new Date(r.timestamp).toLocaleTimeString());
+        const heartRates = readings.map(r => r.heart_rate);
+        const spo2Readings = readings.map(r => r.spo2);
+        const objectTemps = readings.map(r => r.object_temp);
+
+        healthChart.data.labels = labels.reverse();
+        healthChart.data.datasets[0].data = heartRates.reverse();
+        healthChart.data.datasets[1].data = spo2Readings.reverse();
+        healthChart.data.datasets[2].data = objectTemps.reverse();
+
+        healthChart.update();
+    }
+
+    function fetchHealthData() {
+        fetch('/api/readings')
+            .then(response => response.json())
+            .then(updateDashboard)
+            .catch(error => console.error('Error fetching health data:', error));
+    }
+
+    // Initial fetch and then every 5 seconds
+    fetchHealthData();
+    setInterval(fetchHealthData, 5000);
+</script>
+{% endblock %}

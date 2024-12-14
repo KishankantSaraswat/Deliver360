@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Leaflet CSS and JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <!-- Chart.js with Annotation Plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="grid grid-cols-1 md:grid-cols-5 gap-6 p-6">
+    <!-- Sidebar -->
+    <div class="static md:col-span-1 bg-white rounded-lg shadow-md p-6 flex flex-col items-center">
+      <h1 class="text-red-500 text-4xl font-extrabold mb-4 text-center">Admin Dashboard</h1>
+      <img 
+        src="logo.png" 
+        alt="Profile Picture" 
+        class="w-24 h-24 rounded-full mb-6 object-cover"
+      />
+      <ul class="space-y-6 w-full text-center">
+        <li class="bg-white-100 p-3 rounded-lg cursor-pointer hover:bg-red-100 relative">
+          <button class="w-full text-center" id="dashboard-dropdown-button">
+            Delivery Workers
+          </button>
+          <div id="dashboard-dropdown" class="hidden absolute z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow">
+            <ul class="py-1 text-sm text-gray-700">
+              <li>
+                <a href="index.html" data-value="person1" class="block py-2 px-4 hover:bg-gray-100">Person 1</a>
+              </li>
+              <li>
+                <a href="P2.html" data-value="person2" class="block py-2 px-4 hover:bg-gray-100">Person 2</a>
+              </li>
+              <li>
+                <a href="P3.html" data-value="person3" class="block py-2 px-4 hover:bg-gray-100">Person 3</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+        <li class="bg-white-100 p-3 rounded-lg cursor-pointer hover:bg-red-100">Shipment</li>
+        <li class="bg-white-100 p-3 rounded-lg cursor-pointer hover:bg-red-100">Customer</li>
+        <li class="bg-white-100 p-3 rounded-lg cursor-pointer hover:bg-red-100">Analysis</li>
+        <li class="bg-white-100 p-3 rounded-lg cursor-pointer hover:bg-red-100">History</li>
+        <li class="bg-white-100 p-3 rounded-lg cursor-pointer hover:bg-red-100">Notification</li>
+      </ul>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="md:col-span-3 bg-white rounded-lg shadow-md p-6 grid grid-rows-auto gap-6">
+      
+      <div class="text-center">
+        <h2 class="text-red-500 text-xl font-bold" id="dashboard-title">Person 1</h2>
+      </div>
+
+      <!-- Map -->
+      <div class="rounded-lg overflow-hidden h-[300px]">
+        <div id="map" class="h-full"></div>
+      </div>
+
+      <!-- Details -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Health Condition Card -->
+        <div class="bg-gray-100 rounded-lg p-6 shadow-md">
+          <h3 class="text-red-500 text-lg font-bold mb-4">Health Condition</h3>
+          <p>Temperature: 95°C</p>
+          <p>Pulse Rate: 56bpm</p>
+          <p>Heart Rate:45bpm</p>
+          <canvas id="healthChart" class="mt-4 w-full"></canvas>
+        </div>
+
+        <!-- Drunken Capacity Card -->
+        <div class="bg-gray-100 rounded-lg p-6 shadow-md">
+          <h3 class="text-red-500 text-lg font-bold mb-4">Drunken Capacity</h3>
+          <div class="flex items-center justify-between">
+            <p>Drunk: 86%</p>
+            <div class="w-full h-5 bg-gray-300 rounded-full overflow-hidden ml-4">
+              <div class="h-full bg-red-500" style="width: 86%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overspeeding Card -->
+        <div class="bg-gray-100 rounded-lg p-6 shadow-md">
+          <h3 class="text-red-500 text-lg font-bold mb-4">Overspeeding & Accident</h3>
+          <div class="flex items-center justify-between">
+            <p>Speed: <span class="speed-value font-bold text-lg">82 km/h</span></p>
+            <p class="speed-alert px-3 py-1 rounded-lg text-white bg-green-500">No Alert</p>
+          </div>
+          <canvas id="speedChart" class="mt-4 w-full"></canvas>
+        </div>
+
+       
+
+        <div class="bg-gray-100 rounded-lg p-6 shadow-md md:col-span-3">
+          <h3 class="text-red-500 text-lg font-bold mb-4">Order Details</h3>
+          <div class="overflow-x-auto">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-gray-50 text-gray-500 text-sm">
+                  <th class="p-3 text-left">Order ID</th>
+                  <th class="p-3 text-left">Location</th>
+                  <th class="p-3 text-left">Distance</th>
+                  <th class="p-3 text-left">Status</th>
+                  <th class="p-3 text-left">Camera Capture</th>
+                  <th class="p-3 text-left">Lidar Capture</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b hover:bg-gray-50">
+                  <td class="p-3 font-medium">ORD-123</td>
+                  <td class="p-3">Manipal University, Jaipur</td>
+                  <td class="p-3">20 KM</td>
+                  <td class="p-3">
+                    <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800">Completed</span>
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Camera Capture">
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Lidar Capture">
+                  </td>
+                </tr>
+                <tr class="border-b hover:bg-gray-50">
+                  <td class="p-3 font-medium">ORD-213</td>
+                  <td class="p-3">Jaipur Station</td>
+                  <td class="p-3">23 KM</td>
+                  <td class="p-3">
+                    <span class="px-3 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800">Pending</span>
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Camera Capture">
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Lidar Capture">
+                  </td>
+                </tr>
+                <tr class="border-b hover:bg-gray-50">
+                  <td class="p-3 font-medium">ORD-321</td>
+                  <td class="p-3">Jaipur Station</td>
+                  <td class="p-3">10 KM</td>
+                  <td class="p-3">
+                    <span class="px-3 py-1 rounded-full text-xs bg-green-100 text-green-800">Completed</span>
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Camera Capture">
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Lidar Capture">
+                  </td>
+                </tr>
+                <tr class="border-b hover:bg-gray-50">
+                  <td class="p-3 font-medium">ORD-413</td>
+                  <td class="p-3">Sector 12, Noida</td>
+                  <td class="p-3">15 KM</td>
+                  <td class="p-3">
+                    <span class="px-3 py-1 rounded-full text-xs bg-red-100 text-red-800">Cancelled</span>
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Camera Capture">
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Lidar Capture">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-medium">ORD-514</td>
+                  <td class="p-3">Indore</td>
+                  <td class="p-3">40 KM</td>
+                  <td class="p-3">
+                    <span class="px-3 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800">Pending</span>
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Camera Capture">
+                  </td>
+                  <td class="p-3">
+                    <img class="w-16 h-16 object-cover rounded-lg" src="https://via.placeholder.com/150" alt="Lidar Capture">
+                  </td>
+                </tr>
+              </tbody>
+              
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+<div class="static md:col-span-1 bg-gray-100 rounded-lg p-4 shadow-md flex flex-col max-w-sm mx-auto">
+  <h3 class="text-red-500 text-lg font-bold mb-3 text-center">Live Camera Feed</h3>
+  <div class="flex-grow flex items-center justify-center">
+    <img 
+      id="live-camera" 
+      class="w-full max-h-[200px] object-cover rounded-lg shadow-md bg-gray-300" 
+      src="https://via.placeholder.com/400"
+    />
+  </div>
+  <h3 class="text-red-500 text-lg font-bold mb-3 text-center">Lidar Data Collection</h3>
+  <div class="flex-grow flex items-center justify-center">
+    <img 
+      id="lidar-data" 
+      class="w-full max-h-[200px] object-cover rounded-lg shadow-md bg-gray-300" 
+      src="https://via.placeholder.com/400"
+    />
+  </div>
+</div>
+
+    <!-- Camera Section -->
+   <!-- Camera Section -->
+
+  <script >
+    // Speed threshold (km/h)
+const SPEED_THRESHOLD = 80;
+
+function createSpeedChart() {
+    const ctx = document.getElementById('speedChart');
+    if (!ctx) {
+        console.error('Speed chart canvas not found');
+        return;
+    }
+
+    const mockSpeedData = {
+        labels: ['0m', '5m', '10m', '15m', '20m', '25m'],
+        speeds: [65, 72, 78, 82, 85, 90]
+    };
+
+    // Determine when speed exceeds threshold
+    const backgroundColors = mockSpeedData.speeds.map(speed => 
+        speed > SPEED_THRESHOLD ? 'rgba(255, 0, 0, 0.2)' : 'rgba(54, 162, 235, 0.2)'
+    );
+
+    const borderColors = mockSpeedData.speeds.map(speed => 
+        speed > SPEED_THRESHOLD ? 'rgb(255, 0, 0)' : 'rgb(54, 162, 235)'
+    );
+
+    new Chart(ctx.getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: mockSpeedData.labels,
+            datasets: [{
+                label: 'Speed (km/h)',
+                data: mockSpeedData.speeds,
+                borderColor: borderColors,
+                backgroundColor: backgroundColors,
+                tension: 0.1,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Speed Over Time',
+                },
+                annotation: {
+                    annotations: {
+                        speedLimit: {
+                            type: 'line',
+                            yMin: SPEED_THRESHOLD,
+                            yMax: SPEED_THRESHOLD,
+                            borderColor: 'red',
+                            borderWidth: 2,
+                            label: {
+                                content: 'Speed Limit',
+                                display: true
+                            }
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'Speed (km/h)'
+                    }
+                }
+            }
+        }
+    });
+
+    // Update Overspeeding Card
+    const speedElement = document.querySelector('.speed-value');
+    const alertElement = document.querySelector('.speed-alert');
+    const latestSpeed = mockSpeedData.speeds[mockSpeedData.speeds.length - 1];
+
+    if (speedElement) speedElement.textContent = `${latestSpeed} km/h`;
+    
+    if (alertElement) {
+        if (latestSpeed > SPEED_THRESHOLD) {
+            alertElement.textContent = 'ALERT';
+            alertElement.classList.remove('bg-green-500');
+            alertElement.classList.add('bg-red-500');
+        } else {
+            alertElement.textContent = 'No Alert';
+            alertElement.classList.remove('bg-red-500');
+            alertElement.classList.add('bg-green-500');
+        }
+    }
+}
+
+function createHealthChart() {
+    const ctx = document.getElementById('healthChart');
+    if (!ctx) {
+        console.error('Health chart canvas not found');
+        return;
+    }
+
+    const mockData = {
+        labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
+        heartRate: [75, 78, 72, 80, 76],
+        pulseRate: [56, 58, 60, 62, 64],
+        thermalTemp: [37.2, 37.5, 37.8, 38.0, 37.6]
+    };
+
+    new Chart(ctx.getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: mockData.labels,
+            datasets: [
+                {
+                    label: 'Heart Rate (bpm)',
+                    data: mockData.heartRate,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Pulse Rate (bpm)',
+                    data: mockData.pulseRate,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgb(54, 162, 235)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Thermal Temperature (°C)',
+                    data: mockData.thermalTemp,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgb(75, 192, 192)',
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Detailed Health Metrics Over Time'
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    title: {
+                        display: true,
+                        text: 'Measurement Value'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function initMap() {
+    const mapContainer = document.getElementById('map');
+    if (!mapContainer) {
+        console.error('Map container not found');
+        return;
+    }
+
+    const map = L.map('map').setView([0, 0], 2);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+    }).addTo(map);
+
+    let marker;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const userLocation = [position.coords.latitude, position.coords.longitude];
+                map.setView(userLocation, 15);
+                
+                if (!marker) {
+                    marker = L.marker(userLocation).addTo(map).bindPopup('You are here!').openPopup();
+                } else {
+                    marker.setLatLng(userLocation).update();
+                }
+            },
+            (error) => {
+                console.error('Error obtaining location', error);
+                alert('Unable to fetch location. Please enable location services.');
+            }
+        );
+    } else {
+        alert('Geolocation is not supported by your browser.');
+    }
+}
+
+// Added check to ensure Chart.js and Leaflet are loaded
+function checkDependencies() {
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not loaded');
+        return false;
+    }
+    if (typeof L === 'undefined') {
+        console.error('Leaflet is not loaded');
+        return false;
+    }
+    return true;
+}
+
+document.getElementById('dashboard-dropdown-button').addEventListener('click', () => {
+    const dropdown = document.getElementById('dashboard-dropdown');
+    dropdown.classList.toggle('hidden');
+});
+
+const dropdownItems = document.querySelectorAll('#dashboard-dropdown a');
+dropdownItems.forEach((item) => {
+    item.addEventListener('click', (event) => {
+        event.preventDefault();
+        const selectedValue = item.getAttribute('data-value');
+        
+        const title = document.getElementById('dashboard-title');
+        title.textContent = selectedValue === 'person1' ? 'Person 1' : 
+                             selectedValue === 'person2' ? 'Person 2' : 'Person 3';
+        
+        if (selectedValue === 'person1') {
+            if (checkDependencies()) {
+                initMap();
+                createHealthChart();
+                createSpeedChart();
+            }
+        } else {
+            // Placeholder for future functionality
+        }
+        
+        document.getElementById('dashboard-dropdown').classList.add('hidden');
+    });
+});
+const videoElement = document.getElementById('live-camera');
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    videoElement.srcObject = stream;
+  })
+  .catch(error => {
+    console.error('Error accessing camera:', error);
+  });
+document.addEventListener('DOMContentLoaded', () => {
+    if (checkDependencies()) {
+        initMap();
+        createHealthChart();
+        createSpeedChart();
+    }
+});
+  </script>
+</body>
+</html>
