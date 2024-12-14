@@ -1,218 +1,181 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Helmet Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto p-6">
-        <div class="bg-white shadow-md rounded-lg p-6">
-            <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">
-                <i class="fas fa-helmet-safety mr-3 text-blue-600"></i>Smart Helmet Dashboard
-            </h1>
+{% extends "layouts/base.html" %}
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Safety Status -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Safety Status</h2>
-                    <div id="safetyStatus" class="space-y-3">
-                        <div class="flex items-center">
-                            <i class="fas fa-wine-bottle mr-3 text-red-500"></i>
-                            <span>Alcohol Level: </span>
-                            <span id="alcoholLevel" class="font-bold ml-2">-</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-wind mr-3 text-green-500"></i>
-                            <span>Air Quality: </span>
-                            <span id="airQuality" class="font-bold ml-2">-</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-exclamation-triangle mr-3 text-yellow-500"></i>
-                            <span>Collision Risk: </span>
-                            <span id="collisionRisk" class="font-bold ml-2">-</span>
-                        </div>
-                    </div>
-                </div>
+{% block title %}Smart Helmet Monitoring Dashboard{% endblock %}
 
-                <!-- Environmental Data -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Environmental Conditions</h2>
-                    <div id="environmentalData" class="space-y-3">
-                        <div class="flex items-center">
-                            <i class="fas fa-thermometer-half mr-3 text-red-400"></i>
-                            <span>Temperature: </span>
-                            <span id="temperature" class="font-bold ml-2">-</span>°C
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-tint mr-3 text-blue-400"></i>
-                            <span>Humidity: </span>
-                            <span id="humidity" class="font-bold ml-2">-</span>%
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-clock mr-3 text-purple-400"></i>
-                            <span>Last Updated: </span>
-                            <span id="lastUpdated" class="font-bold ml-2">-</span>
-                        </div>
-                    </div>
-                </div>
+{% block stylesheets %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
 
-                <!-- Motion Sensors -->
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Motion Sensors</h2>
-                    <div id="motionSensors" class="space-y-3">
-                        <div class="flex items-center">
-                            <i class="fas fa-arrows-alt-v mr-3 text-indigo-500"></i>
-                            <span>Acceleration: </span>
-                            <span id="acceleration" class="font-bold ml-2">-</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-rotate mr-3 text-pink-500"></i>
-                            <span>Rotation: </span>
-                            <span id="rotation" class="font-bold ml-2">-</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-angle-double-right mr-3 text-teal-500"></i>
-                            <span>Orientation: </span>
-                            <span id="orientation" class="font-bold ml-2">-</span>
-                        </div>
-                    </div>
-                </div>
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold text-center mb-8 text-gradient bg-gradient-to-r from-blue-500 via-green-500 to-purple-500">
+        🏍️ Smart Helmet Dashboard 🛡️
+    </h1>
+    
+    <div class="flex flex-col md:flex-row gap-6">
+        <!-- Safety Status Card -->
+        <div class="flex-1 bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">🚨 Collision Risk</h2>
+            <div id="collisionRiskValue" class="text-5xl font-extrabold text-red-600">--</div>
+            <div class="text-sm text-gray-500">Safety Status</div>
+        </div>
+    
+        <!-- Alcohol Level Card -->
+        <div class="flex-1 bg-gradient-to-br from-yellow-50 to-yellow-100 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">🍺 Alcohol Level</h2>
+            <div id="alcoholLevelValue" class="text-5xl font-extrabold text-yellow-600">--</div>
+            <div class="text-sm text-gray-500">BAC</div>
+        </div>
+    
+        <!-- Environmental Card -->
+        <div class="flex-1 bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">🌡️ Temperature</h2>
+            <div id="environmentTempValue" class="text-5xl font-extrabold text-green-600">--</div>
+            <div class="text-sm text-gray-500">°C</div>
+        </div>
+    
+        <!-- Air Quality Card -->
+        <div class="flex-1 bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition duration-300">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">💨 Air Quality</h2>
+            <div id="airQualityValue" class="text-5xl font-extrabold text-blue-600">--</div>
+            <div class="text-sm text-gray-500">Index</div>
+        </div>
+    </div>
+
+    <!-- Motion Sensors Section -->
+    <div class="mt-8 bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">🛹 Motion Sensors</h2>
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <h3 class="text-lg font-medium text-gray-600">Acceleration</h3>
+                <div id="accelerationValue" class="text-3xl font-bold text-purple-600">--</div>
             </div>
-
-            <!-- Charts Section -->
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Acceleration Chart</h2>
-                    <canvas id="accelerationChart"></canvas>
-                </div>
-                <div class="bg-gray-50 p-4 rounded-lg shadow-inner">
-                    <h2 class="text-xl font-semibold mb-4 text-gray-700">Rotation Chart</h2>
-                    <canvas id="rotationChart"></canvas>
-                </div>
+            <div>
+                <h3 class="text-lg font-medium text-gray-600">Rotation</h3>
+                <div id="rotationValue" class="text-3xl font-bold text-purple-600">--</div>
+            </div>
+            <div>
+                <h3 class="text-lg font-medium text-gray-600">Orientation</h3>
+                <div id="orientationValue" class="text-3xl font-bold text-purple-600">--</div>
             </div>
         </div>
     </div>
 
-    <script>
-        // Chart configuration
-        const accelerationChartCtx = document.getElementById('accelerationChart').getContext('2d');
-        const rotationChartCtx = document.getElementById('rotationChart').getContext('2d');
+    <!-- Chart Section -->
+    <div class="mt-8 bg-gradient-to-br from-gray-50 to-gray-100 p-6 rounded-lg shadow-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">📊 Historical Sensor Data</h2>
+        <canvas id="sensorChart" class="w-full h-96"></canvas>
+    </div>
+</div>
+{% endblock %}
 
-        const accelerationChart = new Chart(accelerationChartCtx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Total Acceleration',
+{% block javascripts %}
+<script>
+    const sensorChart = new Chart(document.getElementById('sensorChart'), {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: 'Acceleration',
+                    borderColor: 'rgb(54, 162, 235)',
                     data: [],
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                },
+                {
+                    label: 'Rotation',
                     borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-
-        const rotationChart = new Chart(rotationChartCtx, {
-            type: 'line',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: 'Total Rotation',
                     data: [],
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                },
+                {
+                    label: 'Temperature',
                     borderColor: 'rgb(255, 99, 132)',
-                    tension: 0.1
-                }]
+                    data: [],
+                    tension: 0.4,
+                    fill: true,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: {
+                        font: {
+                            size: 14
+                        }
+                    }
+                }
             },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)',
+                    }
+                },
+                x: {
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.1)',
                     }
                 }
             }
-        });
-
-        // Data update function
-        function updateDashboard() {
-            fetch('/get-latest-data')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('No data received');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Safety Status
-                    document.getElementById('alcoholLevel').textContent = data.alcoholLevel.toFixed(2);
-                    document.getElementById('airQuality').textContent = data.airQuality.toFixed(2);
-                    
-                    // Collision Risk
-                    const collisionRisk = data.collisionDetected ? 'High' : 'Low';
-                    const collisionRiskElement = document.getElementById('collisionRisk');
-                    collisionRiskElement.textContent = collisionRisk;
-                    collisionRiskElement.className = data.collisionDetected 
-                        ? 'font-bold ml-2 text-red-600' 
-                        : 'font-bold ml-2 text-green-600';
-
-                    // Environmental Data
-                    document.getElementById('temperature').textContent = data.temperature.toFixed(1);
-                    document.getElementById('humidity').textContent = data.humidity.toFixed(1);
-                    document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
-
-                    // Motion Sensors
-                    document.getElementById('acceleration').textContent = data.totalAcceleration.toFixed(2);
-                    document.getElementById('rotation').textContent = data.totalRotation.toFixed(2);
-                    
-                    // Orientation
-                    const orientationText = data.isUpsideDown ? 'Upside Down' : 
-                                            data.isVertical ? 'Vertical' : 
-                                            data.isLayingFlat ? 'Laying Flat' : 'Normal';
-                    document.getElementById('orientation').textContent = orientationText;
-
-                    // Update Charts
-                    const now = new Date().toLocaleTimeString();
-                    
-                    // Acceleration Chart
-                    accelerationChart.data.labels.push(now);
-                    accelerationChart.data.datasets[0].data.push(data.totalAcceleration);
-                    if (accelerationChart.data.labels.length > 10) {
-                        accelerationChart.data.labels.shift();
-                        accelerationChart.data.datasets[0].data.shift();
-                    }
-                    accelerationChart.update();
-
-                    // Rotation Chart
-                    rotationChart.data.labels.push(now);
-                    rotationChart.data.datasets[0].data.push(data.totalRotation);
-                    if (rotationChart.data.labels.length > 10) {
-                        rotationChart.data.labels.shift();
-                        rotationChart.data.datasets[0].data.shift();
-                    }
-                    rotationChart.update();
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    // Optional: Update UI to show connection error
-                });
         }
+    });
 
-        // Update dashboard every 5 seconds
-        setInterval(updateDashboard, 5000);
-        
-        // Initial update
-        updateDashboard();
-    </script>
-</body>
-</html>
+    function updateDashboard(readings) {
+        const latestReading = readings[0];
+
+        // Update main dashboard values
+        document.getElementById('collisionRiskValue').textContent = 
+            latestReading.collision_risk ? 'High' : 'Low';
+        document.getElementById('alcoholLevelValue').textContent = 
+            latestReading.alcohol_level.toFixed(2);
+        document.getElementById('environmentTempValue').textContent = 
+            latestReading.temperature.toFixed(1);
+        document.getElementById('airQualityValue').textContent = 
+            latestReading.air_quality.toFixed(1);
+
+        // Motion Sensors
+        document.getElementById('accelerationValue').textContent = 
+            latestReading.total_acceleration.toFixed(2);
+        document.getElementById('rotationValue').textContent = 
+            latestReading.total_rotation.toFixed(2);
+        document.getElementById('orientationValue').textContent = 
+            latestReading.is_upside_down ? 'Upside Down' : 
+            latestReading.is_vertical ? 'Vertical' : 
+            latestReading.is_laying_flat ? 'Laying Flat' : 
+            'Normal';
+
+        // Update chart
+        const labels = readings.map(r => new Date(r.timestamp).toLocaleTimeString());
+        const accelerationData = readings.map(r => r.total_acceleration);
+        const rotationData = readings.map(r => r.total_rotation);
+        const temperatureData = readings.map(r => r.temperature);
+
+        sensorChart.data.labels = labels.reverse();
+        sensorChart.data.datasets[0].data = accelerationData.reverse();
+        sensorChart.data.datasets[1].data = rotationData.reverse();
+        sensorChart.data.datasets[2].data = temperatureData.reverse();
+
+        sensorChart.update();
+    }
+
+    function fetchHelmetData() {
+        fetch('/api/helmet-readings')
+            .then(response => response.json())
+            .then(updateDashboard)
+            .catch(error => console.error('Error fetching helmet data:', error));
+    }
+
+    // Initial fetch and then every 5 seconds
+    fetchHelmetData();
+    setInterval(fetchHelmetData, 5000);
+</script>
+{% endblock %}
