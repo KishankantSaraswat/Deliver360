@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Azure Maps Multi-Destination Route Optimizer</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      #map {
+        height: 500px;
+        width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="min-vh-100 d-flex align-items-center justify-content-center">
+    <div class="bg-white p-5 rounded-lg shadow-lg w-100" style="max-width: 900px;">
+      <h1 class="text-center mb-5 text-purple-800">Azure Maps Multi-Destination Route Optimizer</h1>
+      <div class="row">
+        <div class="col-md-6">
+          <label class="d-block mb-2 text-gray-700">Source Location</label>
+          <button
+            onclick="getCurrentLocation()"
+            class="btn btn-purple btn-block mb-3"
+          >
+            Use Current Location
+          </button>
+          <div id="sourceCoordinates" class="small text-muted"></div>
+          <div id="currentLocationName" class="small text-muted"></div>
+        </div>
+        <div class="col-md-6">
+          <label class="d-block mb-2 text-gray-700">Enter Locations</label>
+          <textarea
+            id="locationsInput"
+            rows="6"
+            placeholder="Enter locations separated by commas (e.g., Agra, Noida, Delhi, Gurgaon)"
+            class="form-control mb-3"
+          ></textarea>
+
+          <button
+            onclick="getCurrentLocationAndOptimize()"
+            class="btn btn-primary btn-block"
+          >
+            Get Route from Current Location
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-5">
+        <div id="map"></div>
+        <div id="routeDetails" class="mt-4 text-gray-700"></div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css"
+    />
+
+    <script>
+      const map = L.map("map").setView([28.6139, 77.209], 6); // Default to India view
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(map);
+
+      const azureMapsApiKey = "4wagdZe4F718lssYKwCIB4QZyYdzeRkgzBdXlbtLhj4WboZphH0mJQQJ99ALACYeBjFmcvU6AAAgAZMP1Fjb"; // Replace with your Azure Maps API Key
+      let markers = [];
+      let currentRoute = null;
+
+      async function getCurrentLocation() {
+        if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(
+            async function (position) {
+              const lat = position.coords.latitude;
+              const lon = position.coords.longitude;
+              const sourceCoordinates = [lat, lon];
+
+              document.getElementById(
+                "sourceCoordinates"
+              ).innerHTML = `Latitude: ${lat.toFixed(6)}, Longitude: ${lon.toFixed(6)}`;
+
+              // Reverse geocode to get location name
+              const locationName = await reverseGeocode(lat, lon);
+              document.getElementById("currentLocationName").innerHTML = `Current Location: ${locationName}`;
+
+              const sourceMarker = L.marker(sourceCoordinates)
+                .addTo(map)
+                .bindPopup("Your Current Location")
+                .openPopup();
+              map.setView(sourceCoordinates, 13);
+            },
+            function (error) {
+              alert("Error getting location: " + error.message);
+            }
+          );
+        } else {
+          alert("Geolocation is not supported by your browser");
+        }
+      }
+
+      async function reverseGeocode(lat, lon) {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`
+        );
+        const data = await response.json();
+        return data.display_name || "Unknown location";
+      }
+
+      async function geocodeAddress(address) {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            address
+          )}&format=json`
+        );
+        const data = await response.json();
+        if (data.length > 0) {
+          const lat = parseFloat(data[0].lat);
+          const lon = parseFloat(data[0].lon);
+          return [lat, lon];
+        } else {
+          throw new Error(`Address not found: ${address}`);
+        }
+      }
+
+      async function getCurrentLocationAndOptimize() {
+        if (!navigator.geolocation) {
+          alert("Geolocation is not supported by your browser.");
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const currentLat = position.coords.latitude;
+            const currentLon = position.coords.longitude;
+            const currentLocation = [currentLat, currentLon];
+
+            try {
+              const locationsInput = document.getElementById("locationsInput").value;
+              const locations = locationsInput.split(",").map((loc) => loc.trim());
+
+              if (locations.length < 1) {
+                alert("Please enter at least one location.");
+                return;
+              }
+
+              // Geocode all entered locations
+              const destinationCoordinates = await Promise.all(
+                locations.map((location) => geocodeAddress(location))
+              );
+
+              // Clear previous markers and route
+              markers.forEach((marker) => map.removeLayer(marker));
+              markers = [];
+              if (currentRoute) {
+                map.removeLayer(currentRoute);
+              }
+
+              // Add markers for current location and destinations
+              const currentMarker = L.marker(currentLocation)
+                .addTo(map)
+                .bindPopup("Current Location");
+              markers.push(currentMarker);
+
+              destinationCoordinates.forEach((coord, index) => {
+                const marker = L.marker(coord)
+                  .addTo(map)
+                  .bindPopup(locations[index]);
+                markers.push(marker);
+              });
+
+              // Construct the query string for Azure Maps Route API
+              const allCoordinates = [currentLocation, ...destinationCoordinates];
+              const query = allCoordinates.map((coord) => coord.join(",")).join(":");
+
+              const routeResponse = await fetch(
+                `https://atlas.microsoft.com/route/directions/json?api-version=1.0&subscription-key=${azureMapsApiKey}&query=${query}&optimize=shortest&travelMode=car&routeRepresentation=polyline`
+              );
+
+              if (!routeResponse.ok) {
+                throw new Error("Route API responded with an error.");
+              }
+
+              const routeData = await routeResponse.json();
+
+              if (!routeData.routes || routeData.routes.length === 0) {
+                throw new Error("No routes found. Please check the locations.");
+              }
+
+              const routeCoordinates = routeData.routes[0].legs.flatMap((leg) =>
+                leg.points.map((point) => [point.latitude, point.longitude])
+              );
+
+              // Draw the optimized route
+              currentRoute = L.polyline(routeCoordinates, {
+                color: "purple",
+                weight: 5,
+              }).addTo(map);
+              map.fitBounds(currentRoute.getBounds());
+
+              // Display route details
+              const totalDistance =
+                routeData.routes[0].summary.lengthInMeters / 1000; // Convert to km
+              const totalDuration =
+                routeData.routes[0].summary.travelTimeInSeconds / 3600; // Convert to hours
+
+              document.getElementById("routeDetails").innerHTML = ` 
+                <strong>Optimized Route Details:</strong>
+                <p>Starting Point: Current Location</p>
+                <p>Destinations: ${locations.join(" → ")}</p>
+                <p>Total Distance: ${totalDistance.toFixed(2)} km</p>
+                <p>Estimated Duration: ${totalDuration.toFixed(2)} hours</p>
+              `;
+            } catch (error) {
+              alert("Error calculating route: " + error.message);
+            }
+          },
+          (error) => {
+            alert("Unable to fetch current location: " + error.message);
+          }
+        );
+      }
+    </script>
+  </body>
+</html>
