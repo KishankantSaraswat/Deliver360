@@ -20,6 +20,15 @@ from datetime import datetime
 import os
 import logging
 import json
+import requests
+import random
+from langchain.chains import ConversationChain
+from langchain.chains.conversation.memory import ConversationBufferWindowMemory
+from langchain_groq import ChatGroq
+from flask import session
+
+
+
 
 
 os.makedirs('data', exist_ok=True)
@@ -200,6 +209,152 @@ def helmet_dashboard():
 @app.route('/fitness')
 def band_dashboard():
     return render_template('home/fitness.html')
+
+# Load environment variables
+groq_api_key = os.environ['GROQ_API_KEY']  # Ensure your API key is set in the environment variables
+
+# Initialize Groq Langchain chat object
+def get_conversation_chain(model_name):
+    memory = ConversationBufferWindowMemory(k=5)  # Default memory length, can be adjusted
+    groq_chat = ChatGroq(groq_api_key=groq_api_key, model_name=model_name)
+    return ConversationChain(llm=groq_chat, memory=memory)
+
+# Format user input to limit response length and enforce bullet points
+def format_user_prompt(question):
+    formatted_prompt = f"""
+    {question}
+
+    Please provide the answer, and the total response should not exceed 30 words.
+    """
+    return formatted_prompt
+
+# Process and format the response for user
+def process_response(response_text):
+    # Check if response_text contains line breaks or bullet points
+    points = response_text.split('\n')  # Assuming each point comes on a new line
+    
+    if len(points) == 1:
+        # Try to split by periods if no line breaks are found
+        points = response_text.split('. ')
+    
+    # Clean and reformat the response to remove any unwanted symbols and ensure proper format
+    formatted_response = ''
+    for i, point in enumerate(points):
+        point = point.strip('- ')  # Strip unwanted symbols like dashes or extra spaces
+        if point:
+            formatted_response += f"{i+1}. {point}<br>"  # Add HTML line break and numbering
+
+    return formatted_response
+
+
+# Route to display the chatbot UI
+@app.route('/chatbot', methods=['GET'])
+def chatbot():
+    """
+    This route serves the chatbot interface when accessed by the user.
+    It loads the chatbot page.
+    """
+    return render_template('home/chatbot.html')
+
+# Route to handle chat requests from the frontend
+# Route to handle chat requests from the frontend
+@app.route('/chat', methods=['POST'])
+def chat():
+    user_question = request.json.get('message')
+    selected_model = "mixtral-8x7b-32768"  # Example model, adjust as needed
+    memory_length = 5  # Default memory length
+
+    # Get conversation chain and process the user's message
+    conversation_chain = get_conversation_chain(selected_model)
+    conversation_chain.memory.k = memory_length
+
+    # Format the question with word limit and bullet points
+    formatted_prompt = format_user_prompt(user_question)
+    
+    try:
+        # Invoke the conversation chain
+        response = conversation_chain.invoke(formatted_prompt)
+        
+        # Check if response is valid and process it
+        ai_response = process_response(response['response'])
+
+    except Exception as e:
+        ai_response = f"Error processing the response: {str(e)}"
+        print(f"Error during conversation chain invoke: {str(e)}")
+
+    # Update the chat history stored in the session
+    chat_history = session.get('chat_history', [])
+    chat_history.append({'human': user_question, 'AI': ai_response})
+    session['chat_history'] = chat_history
+
+    return jsonify({'response': ai_response})
+
+
+
+
+GROQ_API_KEY = "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"
+GROQ_API_URL = "https://api.groq.com/v1/chat/completions"
+
+health_tips = [
+    "Stay hydrated and take breaks during long deliveries.",
+    "Avoid riding continuously for more than 2 hours; stretch to avoid fatigue.",
+    "Wear breathable clothing to prevent overheating in hot weather.",
+    "Always carry a small first-aid kit for minor injuries.",
+    "Keep an energy bar and water bottle with you during shifts.",
+    "Follow traffic rules and avoid sudden braking to prevent accidents.",
+    "Check your vehicle's tires and brakes before starting your delivery."
+]
+
+
+@app.route('/get-suggestion', methods=['GET'])
+def get_suggestion():
+    """Fetch health suggestion based on IoT data or provide random delivery tips"""
+    global latest_helmet_data
+
+    if latest_helmet_data:
+        # Generate health advice based on received data
+        heart_rate = latest_helmet_data.get("heart_rate", 0)
+        spo2 = latest_helmet_data.get("spo2", 0)
+        object_temp = latest_helmet_data.get("object_temp", 0)
+        ambient_temp = latest_helmet_data.get("ambient_temp", 0)
+
+        prompt_variations = [
+            f"Generate a unique health tip for a delivery boy with these readings: HR {heart_rate} BPM, SpO2 {spo2}%, Object Temp {object_temp}°C, Ambient Temp {ambient_temp}°C.",
+            f"Suggest a health precaution for a delivery worker experiencing: HR {heart_rate}, SpO2 {spo2}, Temp {object_temp}°C. Keep the tip short and practical.",
+            f"A delivery worker is exposed to {ambient_temp}°C. How should they stay safe while ensuring efficient deliveries? Provide actionable health advice.",
+        ]
+        prompt = random.choice(prompt_variations)
+    else:
+        # Provide a random general suggestion if no IoT data is available
+        prompt = random.choice(health_tips)
+
+    headers = {
+        "Authorization": f"Bearer {GROQ_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "mixtral-8x7b",
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 50,
+        "temperature": 1.0  # Increases randomness in response
+    }
+    
+    try:
+        response = requests.post(GROQ_API_URL, json=data, headers=headers)
+        result = response.json()
+        if "choices" in result:
+            suggestion = result["choices"][0]["message"]["content"]
+        else:
+            suggestion = random.choice(health_tips)  # Fall back to random health tips
+    except Exception as e:
+        suggestion = f"Error fetching suggestion: {str(e)}"
+        print(f"Error during suggestion fetching: {str(e)}")
+
+    return jsonify({"suggestion": suggestion})
+
+
+
 
 
 # Main entry point for the Flask app
